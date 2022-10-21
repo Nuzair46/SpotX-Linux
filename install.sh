@@ -96,27 +96,31 @@ echo "SpotX-Linux by @SpotX-CLI"
 echo "**************************"
 echo
 
-# Handle xpui.bak and FORCE_FLAG logic
-if [[ "${FORCE_FLAG}" == "false" ]]; then
-  if [[ -f "${XPUI_BAK}" ]]; then
-    echo "SpotX backup found, SpotX has already been used on this install."
-    echo -e "Re-run SpotX using the '-f' flag to force xpui patching.\n"
-    echo "Skipping xpui patches and continuing SpotX..."
-    XPUI_SKIP="true"
-  else
-    echo "Creating xpui backup..."
-    cp "${XPUI_SPA}" "${XPUI_BAK}"
-    XPUI_SKIP="false"; fi
+# xpui detection
+if [[ ! -f "${XPUI_SPA}" ]]; then
+  echo "xpui not found, skipping xpui patches..."
+  XPUI_SKIP="true"
 else
-  if [[ -f "${XPUI_BAK}" ]]; then
-    echo "Backup xpui found, restoring original..."
-    rm "${XPUI_SPA}"
-    cp "${XPUI_BAK}" "${XPUI_SPA}"
-    XPUI_SKIP="false"
+  if [[ "${FORCE_FLAG}" == "false" ]]; then
+    if [[ -f "${XPUI_BAK}" ]]; then
+      echo "SpotX backup found, SpotX has already been used on this install."
+      echo -e "Re-run SpotX using the '-f' flag to force xpui patching.\n"
+      echo "Skipping xpui patches and continuing SpotX..."
+      XPUI_SKIP="true"
+    else
+      echo "Creating xpui backup..."
+      cp "${XPUI_SPA}" "${XPUI_BAK}"
+      XPUI_SKIP="false"; fi
   else
-    echo "Creating xpui backup..."
-    cp "${XPUI_SPA}" "${XPUI_BAK}"
-    XPUI_SKIP="false"; fi; fi
+    if [[ -f "${XPUI_BAK}" ]]; then
+      echo "Backup xpui found, restoring original..."
+      rm "${XPUI_SPA}"
+      cp "${XPUI_BAK}" "${XPUI_SPA}"
+      XPUI_SKIP="false"
+    else
+      echo "Creating xpui backup..."
+      cp "${XPUI_SPA}" "${XPUI_BAK}"
+      XPUI_SKIP="false"; fi; fi; fi
 
 # Extract xpui.spa
 if [[ "${XPUI_SKIP}" == "false" ]]; then
