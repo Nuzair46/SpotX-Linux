@@ -68,6 +68,7 @@ ENABLE_IGNORE_REC='s|(Enable Ignore In Recommendations for desktop and web",defa
 ENABLE_LIKED_SONGS='s|(Enable Liked Songs section on Artist page",default:)(!1)|$1true|s'
 ENABLE_LYRICS_CHECK='s|(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)|$1true|s'
 ENABLE_LYRICS_MATCH='s|(Enable Lyrics match labels in search results",default:)(!1)|$1true|s'
+ENABLE_MADE_FOR_YOU='s|(Show "Made For You" entry point in the left sidebar.,default:)(!1)|$1true|'
 ENABLE_NEW_SIDEBAR='s|(Enable Your Library X view of the left sidebar",default:)(!1)|$1true|s'
 ENABLE_PLAYLIST_CREATION_FLOW='s|(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)|$1true|s'
 ENABLE_PLAYLIST_PERMISSIONS_FLOWS='s|(Enable Playlist Permissions flows for Prod",default:)(!1)|$1true|s'
@@ -184,23 +185,25 @@ if [[ "${XPUI_SKIP}" == "false" ]]; then
 if [[ "${XPUI_SKIP}" == "false" ]]; then
   if [[ "${EXPERIMENTAL_FLAG}" == "true" ]]; then
     echo "Adding experimental features..."
-    $PERL "${ENABLE_BALLOONS}" "${XPUI_JS}"
+    #$PERL "${ENABLE_BALLOONS}" "${XPUI_JS}"
     $PERL "${ENABLE_BLOCK_USERS}" "${XPUI_JS}"
-    $PERL "${ENABLE_CAROUSELS}" "${XPUI_JS}"
-    $PERL "${ENABLE_CLEAR_DOWNLOADS}" "${XPUI_JS}"
+    #$PERL "${ENABLE_CAROUSELS}" "${XPUI_JS}"
+    #$PERL "${ENABLE_CLEAR_DOWNLOADS}" "${XPUI_JS}"
     $PERL "${ENABLE_DISCOG_SHELF}" "${XPUI_JS}"
     $PERL "${ENABLE_ENHANCE_PLAYLIST}" "${XPUI_JS}"
-    $PERL "${ENABLE_ENHANCE_SONGS}" "${XPUI_JS}"
-    $PERL "${ENABLE_EQUALIZER}" "${XPUI_JS}"
-    $PERL "${ENABLE_IGNORE_REC}" "${XPUI_JS}"
+    #$PERL "${ENABLE_ENHANCE_SONGS}" "${XPUI_JS}"
+    #$PERL "${ENABLE_EQUALIZER}" "${XPUI_JS}"
+    #$PERL "${ENABLE_IGNORE_REC}" "${XPUI_JS}"
     $PERL "${ENABLE_LIKED_SONGS}" "${XPUI_JS}"
-    $PERL "${ENABLE_LYRICS_CHECK}" "${XPUI_JS}"
-    $PERL "${ENABLE_LYRICS_MATCH}" "${XPUI_JS}"
+    #$PERL "${ENABLE_LYRICS_CHECK}" "${XPUI_JS}"
+    #$PERL "${ENABLE_LYRICS_MATCH}" "${XPUI_JS}"
+    $PERL "${ENABLE_MADE_FOR_YOU}" "${XPUI_JS}"
     #$PERL "${ENABLE_NEW_SIDEBAR}" "${XPUI_JS}"
     $PERL "${ENABLE_PLAYLIST_CREATION_FLOW}" "${XPUI_JS}"
     $PERL "${ENABLE_PLAYLIST_PERMISSIONS_FLOWS}" "${XPUI_JS}"
-    $PERL "${ENABLE_SEARCH_BOX}" "${XPUI_JS}"
-    $PERL "${ENABLE_SIMILAR_PLAYLIST}" "${XPUI_JS}"; fi; fi
+    #$PERL "${ENABLE_SEARCH_BOX}" "${XPUI_JS}"
+    #$PERL "${ENABLE_SIMILAR_PLAYLIST}" "${XPUI_JS}"; 
+  fi; fi
 
 # Remove logging
 if [[ "${XPUI_SKIP}" == "false" ]]; then
