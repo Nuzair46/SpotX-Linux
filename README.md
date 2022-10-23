@@ -55,7 +55,7 @@ or
 
 ### DISCLAIMER
 
-- Ad blocking is the main concern of this repo. Any other feature provided by SpotX-Linux or consequence of using those features will be the sole responsibility of the user. BlockTheSpot, SpotX, SpotX-CLI, SpotX-Linux will be responsible.
+- Ad blocking is the main concern of this repo. Any other feature provided by SpotX-Linux or consequence of using those features will be the sole responsibility of the user, not BlockTheSpot/SpotX/SpotX-CLI/SpotX-Linux.
 
 ### Credits
 
