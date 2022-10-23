@@ -15,7 +15,7 @@
 - Blocks all banner/video/audio ads within the app
 - Retains friend, vertical video and radio functionality
 - Unlocks the skip function for any track
-- Enables [experimental features](https://github.com/SpotX-CLI/SpotX-Win/discussions/50) (optional)
+- Enables some experimental features (optional)
 
 ### Installation/Update:
 
