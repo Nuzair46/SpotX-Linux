@@ -7,7 +7,7 @@ command -v zip >/dev/null || { echo -e "\nzip was not found, exiting...\n" >&2; 
 
 # Inital paths and filenames
 CACHE_PATH="${HOME}/.cache/spotify/"
-INSTALL_PATH=$(readlink -e `type -p spotify`| rev | cut -d/ -f2- | rev)
+INSTALL_PATH=$(readlink -e `type -p spotify` | rev | cut -d/ -f2- | rev)
 XPUI_PATH="${INSTALL_PATH}/Apps"
 XPUI_DIR="${XPUI_PATH}/xpui"
 XPUI_BAK="${XPUI_PATH}/xpui.bak"
@@ -56,23 +56,24 @@ AD_BILLBOARD='s|.(\?\[.{1,6}[a-zA-Z].leaderboard,)|false$1|'
 AD_UPSELL='s|(Enables quicksilver in-app messaging modal",default:)(!0)|$1false|'
 
 # Experimental (A/B test) features
-ENABLE_BALLOONS='s|(Enable showing balloons on album release date anniversaries",default:)(!1)|$1true|s'
+#ENABLE_BALLOONS='s|(Enable showing balloons on album release date anniversaries",default:)(!1)|$1true|s'
 ENABLE_BLOCK_USERS='s|(Enable block users feature in clientX",default:)(!1)|$1true|s'
-ENABLE_CAROUSELS='s|(Use carousels on Home",default:)(!1)|$1true|s'
-ENABLE_CLEAR_DOWNLOADS='s|(Enable option in settings to clear all downloads",default:)(!1)|$1true|s'
+#ENABLE_CAROUSELS='s|(Use carousels on Home",default:)(!1)|$1true|s'
+#ENABLE_CLEAR_DOWNLOADS='s|(Enable option in settings to clear all downloads",default:)(!1)|$1true|s'
 ENABLE_DISCOG_SHELF='s|(Enable a condensed disography shelf on artist pages",default:)(!1)|$1true|s'
 ENABLE_ENHANCE_PLAYLIST='s|(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)|$1true|s'
-ENABLE_ENHANCE_SONGS='s|(Enable Enhance Liked Songs UI and functionality",default:)(!1)|$1true|s'
-ENABLE_EQUALIZER='s|(Enable audio equalizer for Desktop and Web Player",default:)(!1)|$1true|s'
+#ENABLE_ENHANCE_SONGS='s|(Enable Enhance Liked Songs UI and functionality",default:)(!1)|$1true|s'
+#ENABLE_EQUALIZER='s|(Enable audio equalizer for Desktop and Web Player",default:)(!1)|$1true|s'
 ENABLE_IGNORE_REC='s|(Enable Ignore In Recommendations for desktop and web",default:)(!1)|$1true|s'
-ENABLE_LIKED_SONGS='s|(Enable Liked Songs section on Artist page",default:)(!1)|$1true|s'
-ENABLE_LYRICS_CHECK='s|(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)|$1true|s'
-ENABLE_LYRICS_MATCH='s|(Enable Lyrics match labels in search results",default:)(!1)|$1true|s'
-ENABLE_MADE_FOR_YOU='s|(Show "Made For You" entry point in the left sidebar.,default:)(!1)|$1true|'
-ENABLE_NEW_SIDEBAR='s|(Enable Your Library X view of the left sidebar",default:)(!1)|$1true|s'
+#ENABLE_LIKED_SONGS='s|(Enable Liked Songs section on Artist page",default:)(!1)|$1true|s'
+#ENABLE_LYRICS_CHECK='s|(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)|$1true|s'
+#ENABLE_LYRICS_MATCH='s|(Enable Lyrics match labels in search results",default:)(!1)|$1true|s'
+ENABLE_MADE_FOR_YOU='s|(Show "Made For You" entry point in the left sidebar.,default:)(!1)|$1true|s'
+#ENABLE_NEW_SIDEBAR='s|(Enable Your Library X view of the left sidebar",default:)(!1)|$1true|s'
 ENABLE_PLAYLIST_CREATION_FLOW='s|(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)|$1true|s'
 ENABLE_PLAYLIST_PERMISSIONS_FLOWS='s|(Enable Playlist Permissions flows for Prod",default:)(!1)|$1true|s'
-ENABLE_SEARCH_BOX='s|(Adds a search box so users are able to filter playlists when trying to add songs to a playlist using the contextmenu",default:)(!1)|$1true|s'
+#ENABLE_SEARCH_BOX='s|(Adds a search box so users are able to filter playlists when trying to add songs to a playlist using the contextmenu",default:)(!1)|$1true|s'
+#ENABLE_SIMILAR_PLAYLIST='s/,(.\.isOwnedBySelf&&)((\(.{0,11}\)|..createElement)\(.{1,3}Fragment,.+?{(uri:.|spec:.),(uri:.|spec:.).+?contextmenu.create-similar-playlist"\)}\),)/,$2$1/s'
 
 # Hide Premium-only features
 HIDE_DL_QUALITY='s/(\(.,..jsxs\)\(.{1,3}|(.\(\).|..)createElement\(.{1,4}),\{(filterMatchQuery|filter:.,title|(variant:"viola",semanticColor:"textSubdued"|..:"span",variant:.{3,6}mesto,color:.{3,6}),htmlFor:"desktop.settings.downloadQuality.+?).{1,6}get\("desktop.settings.downloadQuality.title.+?(children:.{1,2}\(.,.\).+?,|\(.,.\){3,4},|,.\)}},.\(.,.\)\),)//'
@@ -202,7 +203,7 @@ if [[ "${XPUI_SKIP}" == "false" ]]; then
     $PERL "${ENABLE_PLAYLIST_CREATION_FLOW}" "${XPUI_JS}"
     $PERL "${ENABLE_PLAYLIST_PERMISSIONS_FLOWS}" "${XPUI_JS}"
     #$PERL "${ENABLE_SEARCH_BOX}" "${XPUI_JS}"
-    #$PERL "${ENABLE_SIMILAR_PLAYLIST}" "${XPUI_JS}"; 
+    #$PERL "${ENABLE_SIMILAR_PLAYLIST}" "${XPUI_JS}"
   fi; fi
 
 # Remove logging
