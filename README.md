@@ -2,7 +2,7 @@
 
 <center>
     <h1 align="center">SpotX for Linux</h1>
-    <h4 align="center">A multi-purpose adblocker and skip-bypass for the Spotify Linux application.</h4>
+    <h4 align="center">A multi-featured adblocker for the Spotify desktop client for Linux.</h4>
     <h5 align="center">Please support Spotify by purchasing premium</h5>
     <p align="center">
         <strong>Last updated:</strong> 20 October 2022<br>
@@ -13,7 +13,7 @@
 ### Features:
 
 - Blocks all banner/video/audio ads within the app
-- Retains friend, vertical video and radio functionality
+- Blocks logging (Sentry, etc)
 - Unlocks the skip function for any track
 - Enables some experimental features (optional)
 
@@ -55,7 +55,7 @@ or
 
 ### DISCLAIMER
 
-- Ad blocking is the main concern of this repo. Any other feature provided by SpotX-Linux or consequence of using those features will be the sole responsibility of the user and not either BlockTheSpot or SpotX, SpotX-Linux team will be responsible.
+- Ad blocking is the main concern of this repo. Any other feature provided by SpotX-Linux or consequence of using those features will be the sole responsibility of the user. BlockTheSpot, SpotX, SpotX-CLI, SpotX-Linux will be responsible.
 
 ### Credits
 
