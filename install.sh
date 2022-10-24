@@ -5,9 +5,32 @@ command -v perl >/dev/null || { echo -e "\nperl was not found, exiting...\n" >&2
 command -v unzip >/dev/null || { echo -e "\nunzip was not found, exiting...\n" >&2; exit 1; }
 command -v zip >/dev/null || { echo -e "\nzip was not found, exiting...\n" >&2; exit 1; }
 
-# Inital paths and filenames
+# Script flags
+CACHE_FLAG='false'
+EXPERIMENTAL_FLAG='false'
+FORCE_FLAG='false'
+PATH_FLAG=''
+PREMIUM_FLAG='false'
+
+while getopts 'cefP:p' flag; do
+  case "${flag}" in
+    c) CACHE_FLAG='true' ;;
+    e) EXPERIMENTAL_FLAG='true' ;;
+    f) FORCE_FLAG='true' ;;
+    P) 
+      PATH_FLAG="${OPTARG}"
+      INSTALL_PATH="${PATH_FLAG}" ;;
+    p) PREMIUM_FLAG='true' ;;
+    *) 
+      echo "Error: ${flag} not supported."
+      exit ;;
+  esac
+done
+
+# path vars
+if [ -z ${INSTALL_PATH+x} ]; then 
+  INSTALL_PATH=$(readlink -e `type -p spotify` 2>/dev/null | rev | cut -d/ -f2- | rev); fi
 CACHE_PATH="${HOME}/.cache/spotify/"
-INSTALL_PATH=$(readlink -e `type -p spotify` | rev | cut -d/ -f2- | rev)
 XPUI_PATH="${INSTALL_PATH}/Apps"
 XPUI_DIR="${XPUI_PATH}/xpui"
 XPUI_BAK="${XPUI_PATH}/xpui.bak"
@@ -16,33 +39,6 @@ XPUI_JS="${XPUI_DIR}/xpui.js"
 XPUI_CSS="${XPUI_DIR}/xpui.css"
 HOME_V2_JS="${XPUI_DIR}/home-v2.js"
 VENDOR_XPUI_JS="${XPUI_DIR}/vendor~xpui.js"
-
-# Detect client in PATH
-if [[ ! -d "${INSTALL_PATH}" ]]; then
-  echo -e "\nSpotify not found in PATH. Exiting...\n"
-  exit; fi
-
-# Script flags
-CACHE_FLAG='false'
-EXPERIMENTAL_FLAG='false'
-FORCE_FLAG='false'
-PREMIUM_FLAG='false'
-
-while getopts 'cefp' flag; do
-  case "${flag}" in
-    c) 
-      CACHE_FLAG='true' ;;
-    e) 
-      EXPERIMENTAL_FLAG='true' ;;
-    f) 
-      FORCE_FLAG='true' ;;
-    p)
-      PREMIUM_FLAG='true' ;;
-    *) 
-      echo "Error: Flag not supported."
-      exit ;;
-  esac
-done
 
 # Perl command
 PERL="perl -pi -w -e"
@@ -98,11 +94,19 @@ echo "SpotX-Linux by @SpotX-CLI"
 echo "**************************"
 echo
 
+# Detect client in PATH
+if [[ ! -d "${INSTALL_PATH}" ]]; then
+  echo -e "\nSpotify path not found.\nSet directory path with -P flag.\nExiting...\n"
+  exit; fi
+
 # xpui detection
 if [[ ! -f "${XPUI_SPA}" ]]; then
   echo - e "\nxpui not found!\nReinstall Spotify then try again.\nExiting...\n"
   exit
 else
+  if [[ ! -w "${XPUI_PATH}" ]]; then
+    echo -e "\nSpotX does not have write permission in Spotify directory.\nRequesting sudo permission...\n"
+    sudo chmod a+wr "${INSTALL_PATH}" && sudo chmod a+wr -R "${XPUI_PATH}"; fi
   if [[ "${FORCE_FLAG}" == "false" ]]; then
     if [[ -f "${XPUI_BAK}" ]]; then
       echo "SpotX backup found, SpotX has already been used on this install."
