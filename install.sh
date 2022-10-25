@@ -50,9 +50,11 @@ if [ -z ${INSTALL_PATH+x} ]; then
 else
   if [[ ! -d "${INSTALL_PATH}" ]]; then
     echo -e "Directory path set by -P was not found.\nExiting...\n"
+    exit
+  elif [[ ! -f "${INSTALL_PATH}/Apps/xpui.spa" ]]; then
+    echo -e "No xpui found in directory provided with -P.\nPlease confirm directory and try again or re-install Spotify.\nExiting...\n"
     exit; fi; fi
-  
-    
+     
 # Path vars
 CACHE_PATH="${HOME}/.cache/spotify/"
 XPUI_PATH="${INSTALL_PATH}/Apps"
