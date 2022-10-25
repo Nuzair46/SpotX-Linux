@@ -108,7 +108,7 @@ CONNECT_4='s/return (..isDisabled)(\?(..createElement|\(.{1,10}\))\(..,)/return 
 
 # xpui detection
 if [[ ! -f "${XPUI_SPA}" ]]; then
-  echo - e "\nxpui not found!\nReinstall Spotify then try again.\nExiting...\n"
+  echo -e "\nxpui not found!\nReinstall Spotify then try again.\nExiting...\n"
   exit
 else
   if [[ ! -w "${XPUI_PATH}" ]]; then
