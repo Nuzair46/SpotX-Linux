@@ -46,7 +46,12 @@ if [ -z ${INSTALL_PATH+x} ]; then
       echo "Spotify directory found: ${INSTALL_PATH}"
     elif [[ ! -d "${INSTALL_PATH}" ]]; then
       echo "Spotify directory not found. Set directory path with -P flag.\nExiting...\n"
-      exit; fi; fi; fi
+      exit; fi; fi
+else
+  if [[ ! -d "${INSTALL_PATH}" ]]; then
+    echo -e "Directory path set by -P was not found.\nExiting...\n"
+    exit; fi; fi
+  
     
 # Path vars
 CACHE_PATH="${HOME}/.cache/spotify/"
