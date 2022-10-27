@@ -31,7 +31,7 @@ NOTE: SpotX does not support the Spotify client from Snap
 - Run The following command in Terminal:
 
 ```
-bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/jet-test-flatpak-1/install.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh)
 ```
 
 #### Optional Install Arguments:
@@ -45,7 +45,7 @@ Use any combination of flags.
 The following example clears app cache and adds experimental features:
     
 ```
-bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/jet-test-flatpak-1/install.sh) -ce
+bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh) -ce
 ```
 
 
