@@ -10,9 +10,9 @@
 ***
 
 <center>
-    <h4 align="center">A multi-featured adblocker for the Spotify desktop client for Linux.</h4>
+    <h4 align="center">A multi-featured adblocker for the Spotify Linux application.</h4>
     <p align="center">
-        <strong>Last updated:</strong> 20 October 2022<br>
+        <strong>Last updated:</strong> 27 October 2022<br>
         <strong>Last tested version:</strong> 1.1.84.716
     </p> 
 </center>

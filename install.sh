@@ -27,9 +27,35 @@ while getopts 'cefP:p' flag; do
   esac
 done
 
-# path vars
+# Credits
+echo
+echo "**************************"
+echo "SpotX-Linux by @SpotX-CLI"
+echo "**************************"
+echo
+
+# Locate install directory
 if [ -z ${INSTALL_PATH+x} ]; then 
-  INSTALL_PATH=$(readlink -e `type -p spotify` 2>/dev/null | rev | cut -d/ -f2- | rev); fi
+  INSTALL_PATH=$(readlink -e `type -p spotify` 2>/dev/null | rev | cut -d/ -f2- | rev)
+  if [[ -d "${INSTALL_PATH}" ]]; then
+    echo "Spotify directory found in PATH: ${INSTALL_PATH}"
+  elif [[ ! -d "${INSTALL_PATH}" ]]; then
+    echo -e "\nSpotify not found in PATH. Searching for Spotify directory..."
+    INSTALL_PATH=$(timeout 10 find / -type f -path "*/spotify/Apps/*" -name "xpui.spa" -size -7M -size +3M -print -quit 2>/dev/null | rev | cut -d/ -f3- | rev)
+    if [[ -d "${INSTALL_PATH}" ]]; then
+      echo "Spotify directory found: ${INSTALL_PATH}"
+    elif [[ ! -d "${INSTALL_PATH}" ]]; then
+      echo "Spotify directory not found. Set directory path with -P flag.\nExiting...\n"
+      exit; fi; fi
+else
+  if [[ ! -d "${INSTALL_PATH}" ]]; then
+    echo -e "Directory path set by -P was not found.\nExiting...\n"
+    exit
+  elif [[ ! -f "${INSTALL_PATH}/Apps/xpui.spa" ]]; then
+    echo -e "No xpui found in directory provided with -P.\nPlease confirm directory and try again or re-install Spotify.\nExiting...\n"
+    exit; fi; fi
+     
+# Path vars
 CACHE_PATH="${HOME}/.cache/spotify/"
 XPUI_PATH="${INSTALL_PATH}/Apps"
 XPUI_DIR="${XPUI_PATH}/xpui"
@@ -87,21 +113,9 @@ CONNECT_2='s|connect-picker.unavailable-to-control|spotify-connect|'
 CONNECT_3='s|(className:.,disabled:)(..)|$1false|'
 CONNECT_4='s/return (..isDisabled)(\?(..createElement|\(.{1,10}\))\(..,)/return false$2/'
 
-# Credits
-echo
-echo "**************************"
-echo "SpotX-Linux by @SpotX-CLI"
-echo "**************************"
-echo
-
-# Detect client in PATH
-if [[ ! -d "${INSTALL_PATH}" ]]; then
-  echo -e "\nSpotify path not found.\nSet directory path with -P flag.\nExiting...\n"
-  exit; fi
-
 # xpui detection
 if [[ ! -f "${XPUI_SPA}" ]]; then
-  echo - e "\nxpui not found!\nReinstall Spotify then try again.\nExiting...\n"
+  echo -e "\nxpui not found!\nReinstall Spotify then try again.\nExiting...\n"
   exit
 else
   if [[ ! -w "${XPUI_PATH}" ]]; then
