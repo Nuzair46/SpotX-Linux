@@ -45,7 +45,7 @@ if [ -z ${INSTALL_PATH+x} ]; then
     if [[ -d "${INSTALL_PATH}" ]]; then
       echo "Spotify directory found: ${INSTALL_PATH}"
     elif [[ ! -d "${INSTALL_PATH}" ]]; then
-      echo "Spotify directory not found. Set directory path with -P flag.\nExiting...\n"
+      echo -e "Spotify directory not found. Set directory path with -P flag.\nExiting...\n"
       exit; fi; fi
 else
   if [[ ! -d "${INSTALL_PATH}" ]]; then
