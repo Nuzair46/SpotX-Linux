@@ -88,7 +88,7 @@ ENABLE_ENHANCE_PLAYLIST='s|(Enable Enhance Playlist UI and functionality for end
 #ENABLE_EQUALIZER='s|(Enable audio equalizer for Desktop and Web Player",default:)(!1)|$1true|s'
 ENABLE_IGNORE_REC='s|(Enable Ignore In Recommendations for desktop and web",default:)(!1)|$1true|s'
 #ENABLE_LIKED_SONGS='s|(Enable Liked Songs section on Artist page",default:)(!1)|$1true|s'
-#ENABLE_LYRICS_CHECK='s|(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)|$1true|s'
+ENABLE_LYRICS_CHECK='s|(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)|$1true|s'
 #ENABLE_LYRICS_MATCH='s|(Enable Lyrics match labels in search results",default:)(!1)|$1true|s'
 ENABLE_MADE_FOR_YOU='s|(Show "Made For You" entry point in the left sidebar.,default:)(!1)|$1true|s'
 #ENABLE_NEW_SIDEBAR='s|(Enable Your Library X view of the left sidebar",default:)(!1)|$1true|s'
@@ -214,7 +214,7 @@ if [[ "${XPUI_SKIP}" == "false" ]]; then
     #$PERL "${ENABLE_EQUALIZER}" "${XPUI_JS}"
     #$PERL "${ENABLE_IGNORE_REC}" "${XPUI_JS}"
     $PERL "${ENABLE_LIKED_SONGS}" "${XPUI_JS}"
-    #$PERL "${ENABLE_LYRICS_CHECK}" "${XPUI_JS}"
+    $PERL "${ENABLE_LYRICS_CHECK}" "${XPUI_JS}"
     #$PERL "${ENABLE_LYRICS_MATCH}" "${XPUI_JS}"
     $PERL "${ENABLE_MADE_FOR_YOU}" "${XPUI_JS}"
     #$PERL "${ENABLE_NEW_SIDEBAR}" "${XPUI_JS}"
