@@ -35,16 +35,24 @@ echo "**************************"
 echo
 
 # Locate install directory
-if [ -z ${INSTALL_PATH+x} ]; then 
+if [ -z ${INSTALL_PATH+x} ]; then
   INSTALL_PATH=$(readlink -e `type -p spotify` 2>/dev/null | rev | cut -d/ -f2- | rev)
-  if [[ -d "${INSTALL_PATH}" ]]; then
+  if [[ -d "${INSTALL_PATH}" && "${INSTALL_PATH}" != "/usr/bin" ]]; then
     echo "Spotify directory found in PATH: ${INSTALL_PATH}"
   elif [[ ! -d "${INSTALL_PATH}" ]]; then
     echo -e "\nSpotify not found in PATH. Searching for Spotify directory..."
-    INSTALL_PATH=$(timeout 10 find / -type f -path "*/spotify/Apps/*" -name "xpui.spa" -size -7M -size +3M -print -quit 2>/dev/null | rev | cut -d/ -f3- | rev)
+    INSTALL_PATH=$(timeout 10 find / -type f -path "*/spotify*Apps/*" -name "xpui.spa" -size -7M -size +3M -print -quit 2>/dev/null | rev | cut -d/ -f3- | rev)
     if [[ -d "${INSTALL_PATH}" ]]; then
       echo "Spotify directory found: ${INSTALL_PATH}"
     elif [[ ! -d "${INSTALL_PATH}" ]]; then
+      echo -e "Spotify directory not found. Set directory path with -P flag.\nExiting...\n"
+      exit; fi
+  elif [[ "${INSTALL_PATH}" == "/usr/bin" ]]; then
+    echo -e "\nSpotify PATH is set to /usr/bin, searching for Spotify directory..."
+    INSTALL_PATH=$(timeout 10 find / -type f -path "*/spotify*Apps/*" -name "xpui.spa" -size -7M -size +3M -print -quit 2>/dev/null | rev | cut -d/ -f3- | rev)
+    if [[ -d "${INSTALL_PATH}" && "${INSTALL_PATH}" != "/usr/bin" ]]; then
+      echo "Spotify directory found: ${INSTALL_PATH}"
+    elif [[ "${INSTALL_PATH}" == "/usr/bin" ]] || [[ ! -d "${INSTALL_PATH}" ]]; then
       echo -e "Spotify directory not found. Set directory path with -P flag.\nExiting...\n"
       exit; fi; fi
 else
