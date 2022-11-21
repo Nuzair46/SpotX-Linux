@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+SPOTX_VERSION="1.1.84.716-1"
+
 # Dependencies check
 command -v perl >/dev/null || { echo -e "\nperl was not found, exiting...\n" >&2; exit 1; }
 command -v unzip >/dev/null || { echo -e "\nunzip was not found, exiting...\n" >&2; exit 1; }
@@ -34,6 +36,9 @@ echo "SpotX-Linux by @SpotX-CLI"
 echo "**************************"
 echo
 
+# Report SpotX version
+echo -e "SpotX-Linux version: ${SPOTX_VERSION}\n"
+
 # Locate install directory
 if [ -z ${INSTALL_PATH+x} ]; then
   INSTALL_PATH=$(readlink -e `type -p spotify` 2>/dev/null | rev | cut -d/ -f2- | rev)
@@ -62,6 +67,15 @@ else
   elif [[ ! -f "${INSTALL_PATH}/Apps/xpui.spa" ]]; then
     echo -e "No xpui found in directory provided with -P.\nPlease confirm directory and try again or re-install Spotify.\nExiting...\n"
     exit; fi; fi
+
+# Find client version
+CLIENT_VERSION=$("${INSTALL_PATH}"/spotify --version | cut -dn -f2- | rev | cut -d. -f2- | rev)
+
+# Version function for version comparison
+function ver { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+
+# Report Spotify version
+echo -e "\nSpotify version: ${CLIENT_VERSION}\n"
      
 # Path vars
 CACHE_PATH="${HOME}/.cache/spotify/"
