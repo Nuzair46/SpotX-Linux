@@ -57,9 +57,7 @@ body:
   attributes:
     label: ℹ Computer information
     description: |
-      - Spotify: e.g. <kbd>Spotify for Linux 1.1.98.683.g5a3b77ad</kbd>
-        - Click <kbd>Spotify</kbd> → <kbd>About Spotify</kbd> → <kbd>About Spotify</kbd>
-        - Click on the `Copy version info` button to copy the Spotify version info to your clipboard.
+      - Spotify: e.g. <kbd>1.1.98.683</kbd>
       - Distro: e.g. <kbd>Ubuntu 22.04.1 LTS</kbd> (please include both distro name and version)
         - Enter the following command in your terminal window: `lsb_release -a` or `cat /etc/*release`
       - Shell: e.g. <kbd>bash</kbd>
