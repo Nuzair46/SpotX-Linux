@@ -32,7 +32,7 @@ while getopts 'cE:efhopP:' flag; do
   esac
 done
 
-# Handle multiple "exclude" flags if desired
+# Handle exclude flag(s)
 for EXCLUDE_VAL in "${EXCLUDE_FLAG[@]}"; do
   if [[ "${EXCLUDE_VAL}" == "leftsidebar" ]]; then EX_LEFTSIDEBAR='true'; fi
 done
