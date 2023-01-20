@@ -13,7 +13,7 @@
     <h4 align="center">A multi-featured adblocker for the Spotify Linux application.</h4>
     <p align="center">
         <strong>Last updated:</strong> 27 December 2022<br>
-        <strong>Last tested version:</strong> 1.2.1.968
+        <strong>Last tested version:</strong> 1.2.3.1115
     </p> 
 </center>
 
@@ -39,7 +39,7 @@ bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/in
 #### Optional Install Arguments:
 `-c`  Clear app cache -- use if UI-related patches aren't working  
 `-e`  Experimental features -- enables experimental features  
-`-E`  Exclude feature -- disables specified feature(s) [currently only supports `leftsidebar`]  
+`-E`  Exclude feature -- disables specified feature(s) [currently disabled]  
 `-f`  Force patch -- forces re-patching if backup detected  
 `-h`  Hide podcasts, episodes and audiobooks on home screen  
 `-o`  Old UI -- skips forced 'new UI' patch  
@@ -47,10 +47,10 @@ bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/in
 `-p`  Premium subscription setup -- use if premium subscriber  
 
 Use any combination of flags.  
-The following example clears app cache, adds experimental features but excludes leftsidebar:
+The following example clears app cache, adds experimental features and uses the new UI (if supported):
     
 ```
-bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh) -ce -E leftsidebar
+bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh) -ce
 ```
 
 
