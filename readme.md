@@ -38,6 +38,12 @@ NOTE: SpotX does not support the Spotify client from Snap
 bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh)
 ```
 
+#### Flatpak Version
+To install on the Flatpak version of Spotify, you'll need to set the path. In the `/stable/` folder of Spotify, there is a folder name that always changes after each update, usually a long name of random characters.
+```
+bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh) -P /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/<FOLDERNAME>/files/extra/share/spotify/
+```
+
 #### Optional Install Arguments:
 `-c`  Clear app cache -- use if UI-related patches aren't working  
 `-e`  Experimental features -- enables experimental features  
@@ -54,7 +60,6 @@ The following example clears app cache, adds experimental features and uses the 
 ```
 bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh) -ce
 ```
-
 
 ### Uninstall:
 
