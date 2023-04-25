@@ -39,9 +39,9 @@ bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/in
 ```
 
 #### Flatpak Version
-To install on the Flatpak version of Spotify, you'll need to set the path. In the `/stable/` folder of Spotify, there is a folder name that always changes after each update, usually a long name of random characters.
+To install on the Flatpak version of Spotify:
 ```
-bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh) -P /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/<FOLDERNAME>/files/extra/share/spotify/
+bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh) -P /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/
 ```
 
 #### Optional Install Arguments:
