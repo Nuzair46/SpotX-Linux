@@ -164,7 +164,7 @@ fi
 CLIENT_VERSION=$("${INSTALL_PATH}"/spotify --version | cut -dn -f2- | rev | cut -d. -f2- | rev)
 
 # Version function for version comparison
-function ver { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+function ver() { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
 # Report Spotify version
 echo -e "\nSpotify version: ${CLIENT_VERSION}\n"
@@ -257,14 +257,14 @@ if [[ ${XPUI_SKIP} == "false" ]]; then
 
         # Unlock Spotify Connect
         echo "Unlocking Spotify Connect..."
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.91.824") ]]; then
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.91.824"))); then
             $PERL "${CONNECT_OLD_1}" "${XPUI_JS}"
             $PERL "${CONNECT_OLD_2}" "${XPUI_JS}"
             $PERL "${CONNECT_OLD_3}" "${XPUI_JS}"
-        elif [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.91.824") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.96.783") ]]; then
+        elif (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.91.824") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.96.783"))); then
             $PERL "${DEVICE_PICKER_NEW}" "${XPUI_JS}"
             $PERL "${CONNECT_NEW}" "${XPUI_JS}"
-        elif [[ $(ver "${CLIENT_VERSION}") -gt $(ver "1.1.96.783") ]]; then
+        elif (($(ver "${CLIENT_VERSION}") > $(ver "1.1.96.783"))); then
             $PERL "${CONNECT_NEW}" "${XPUI_JS}"
         fi
     else
@@ -276,31 +276,31 @@ fi
 if [[ ${XPUI_SKIP} == "false" ]]; then
     if [[ ${EXPERIMENTAL_FLAG} == "true" ]]; then
         echo "Adding experimental features..."
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.99.871") ]]; then $PERL "${ENABLE_ADD_PLAYLIST}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.99.871") ]]; then $PERL "${ENABLE_BAD_BUNNY}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.89.854") ]]; then $PERL "${ENABLE_BALLOONS}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") ]]; then $PERL "${ENABLE_BLOCK_USERS}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.93.896") ]]; then $PERL "${ENABLE_CAROUSELS}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.92.644") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.99.871") ]]; then $PERL "${ENABLE_CLEAR_DOWNLOADS}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.99.871") ]]; then $PERL "${ENABLE_DEVICE_LIST_LOCAL}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.79.763") ]]; then $PERL "${ENABLE_DISCOG_SHELF}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.84.716") ]]; then $PERL "${ENABLE_ENHANCE_PLAYLIST}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.86.857") ]]; then $PERL "${ENABLE_ENHANCE_SONGS}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.88.595") ]]; then $PERL "${ENABLE_EQUALIZER}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.1.958") ]]; then $PERL "${ENABLE_FOLLOWERS_ON_PROFILE}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.0.1155") ]]; then $PERL "${ENABLE_FORGET_DEVICES}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.87.612") ]]; then $PERL "${ENABLE_IGNORE_REC}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") ]]; then $PERL "${ENABLE_LIKED_SONGS}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.94.864") ]]; then $PERL "${ENABLE_LYRICS_CHECK}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.87.612") ]]; then $PERL "${ENABLE_LYRICS_MATCH}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.96.783") ]]; then $PERL "${ENABLE_MADE_FOR_YOU}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.91.824") ]]; then $PERL "${ENABLE_PATHFINDER_DATA}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.94.864") ]]; then $PERL "${ENABLE_PLAYLIST_CREATION_FLOW}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.75.572") ]]; then $PERL "${ENABLE_PLAYLIST_PERMISSIONS_FLOWS}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.0.1165") ]]; then $PERL "${ENABLE_PODCAST_PLAYBACK_SPEED}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.99.871") ]]; then $PERL "${ENABLE_PODCAST_TRIMMING}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.86.857") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.94.864") ]]; then $PERL "${ENABLE_SEARCH_BOX}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.85.884") ]]; then $PERL "${ENABLE_SIMILAR_PLAYLIST}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.99.871"))); then $PERL "${ENABLE_ADD_PLAYLIST}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.99.871"))); then $PERL "${ENABLE_BAD_BUNNY}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.89.854"))); then $PERL "${ENABLE_BALLOONS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610"))); then $PERL "${ENABLE_BLOCK_USERS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.93.896"))); then $PERL "${ENABLE_CAROUSELS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.92.644") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.99.871"))); then $PERL "${ENABLE_CLEAR_DOWNLOADS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.99.871"))); then $PERL "${ENABLE_DEVICE_LIST_LOCAL}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.79.763"))); then $PERL "${ENABLE_DISCOG_SHELF}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.84.716"))); then $PERL "${ENABLE_ENHANCE_PLAYLIST}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.86.857"))); then $PERL "${ENABLE_ENHANCE_SONGS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.88.595"))); then $PERL "${ENABLE_EQUALIZER}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.2.1.958"))); then $PERL "${ENABLE_FOLLOWERS_ON_PROFILE}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.2.0.1155"))); then $PERL "${ENABLE_FORGET_DEVICES}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.87.612"))); then $PERL "${ENABLE_IGNORE_REC}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610"))); then $PERL "${ENABLE_LIKED_SONGS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.94.864"))); then $PERL "${ENABLE_LYRICS_CHECK}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.87.612"))); then $PERL "${ENABLE_LYRICS_MATCH}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.96.783"))); then $PERL "${ENABLE_MADE_FOR_YOU}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.91.824"))); then $PERL "${ENABLE_PATHFINDER_DATA}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.94.864"))); then $PERL "${ENABLE_PLAYLIST_CREATION_FLOW}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.75.572"))); then $PERL "${ENABLE_PLAYLIST_PERMISSIONS_FLOWS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.2.0.1165"))); then $PERL "${ENABLE_PODCAST_PLAYBACK_SPEED}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.99.871"))); then $PERL "${ENABLE_PODCAST_TRIMMING}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.86.857") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.94.864"))); then $PERL "${ENABLE_SEARCH_BOX}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.85.884"))); then $PERL "${ENABLE_SIMILAR_PLAYLIST}" "${XPUI_JS}"; fi
     fi
 fi
 
@@ -315,11 +315,11 @@ fi
 if [[ ${XPUI_SKIP} == "false" ]]; then
     if [[ ${OLD_UI_FLAG} == "true" ]]; then
         echo "Skipping new home UI patch..."
-    elif [[ $(ver "${CLIENT_VERSION}") -gt $(ver "1.1.93.896") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.97.956") ]]; then
+    elif (($(ver "${CLIENT_VERSION}") > $(ver "1.1.93.896") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.97.956"))); then
         echo "Enabling new home screen UI..."
         $PERL "${NEW_UI}" "${XPUI_JS}"
         $PERL "${AUDIOBOOKS_CLIENTX}" "${XPUI_JS}"
-    elif [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.97.956") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.2.3.1107") ]]; then
+    elif (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.97.956") && $(ver "${CLIENT_VERSION}") < $(ver "1.2.3.1107"))); then
         echo "Enabling new home screen UI..."
         $PERL "${NEW_UI_2}" "${XPUI_JS}"
         $PERL "${AUDIOBOOKS_CLIENTX}" "${XPUI_JS}"
@@ -328,27 +328,25 @@ if [[ ${XPUI_SKIP} == "false" ]]; then
     elif [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.3.1107") ]]; then
         echo "Enabling new home screen UI..."
         $PERL "${AUDIOBOOKS_CLIENTX}" "${XPUI_JS}"
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.97.962") ]]; then $PERL "${ENABLE_LEFT_SIDEBAR}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.98.683") ]]; then $PERL "${ENABLE_RIGHT_SIDEBAR}" "${XPUI_JS}"; fi
-        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.0.1165") ]]; then $PERL "${ENABLE_RIGHT_SIDEBAR_LYRICS}" "${XPUI_JS}"; fi
-    else
-        :
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.97.962"))); then $PERL "${ENABLE_LEFT_SIDEBAR}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.98.683"))); then $PERL "${ENABLE_RIGHT_SIDEBAR}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.2.0.1165"))); then $PERL "${ENABLE_RIGHT_SIDEBAR_LYRICS}" "${XPUI_JS}"; fi
     fi
 fi
 
 # Hide podcasts, episodes and audiobooks on home screen
 if [[ ${XPUI_SKIP} == "false" ]]; then
     if [[ ${HIDE_PODCASTS_FLAG} == "true" ]]; then
-        if [[ $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.93.896") ]]; then
+        if (($(ver "${CLIENT_VERSION}") < $(ver "1.1.93.896"))); then
             echo "Hiding non-music items on home screen..."
             $PERL "${HIDE_PODCASTS}" "${XPUI_JS}"
-        elif [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.93.896") && $(ver "${CLIENT_VERSION}") -le $(ver "1.1.96.785") ]]; then
+        elif (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.93.896") && $(ver "${CLIENT_VERSION}") <= $(ver "1.1.96.785"))); then
             echo "Hiding non-music items on home screen..."
             $PERL "${HIDE_PODCASTS2}" "${HOME_V2_JS}"
-        elif [[ $(ver "${CLIENT_VERSION}") -gt $(ver "1.1.96.785") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.98.683") ]]; then
+        elif (($(ver "${CLIENT_VERSION}") > $(ver "1.1.96.785") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.98.683"))); then
             echo "Hiding non-music items on home screen..."
             $PERL "${HIDE_PODCASTS3}" "${HOME_V2_JS}"
-        elif [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.98.683") ]]; then
+        elif (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.98.683"))); then
             echo "Hiding non-music items on home screen..."
             $PERL "${HIDE_PODCASTS3}" "${XPUI_JS}"
         fi
@@ -369,10 +367,9 @@ fi
 
 # Zip files inside xpui folder
 if [[ ${XPUI_SKIP} == "false" ]]; then
-    (
-        cd "${XPUI_DIR}"
-        zip -qq -r ../xpui.spa .
-    )
+    pushd "${XPUI_DIR}" > /dev/null
+    zip -qq -r ../xpui.spa .
+    popd > /dev/null
     rm -rf "${XPUI_DIR}"
 fi
 
