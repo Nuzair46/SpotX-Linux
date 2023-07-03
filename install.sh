@@ -3,9 +3,18 @@
 SPOTX_VERSION="1.2.3.1115-1"
 
 # Dependencies check
-command -v perl >/dev/null || { echo -e "\nperl was not found, please install. Exiting...\n" >&2; exit 1; }
-command -v unzip >/dev/null || { echo -e "\nunzip was not found, please install. Exiting...\n" >&2; exit 1; }
-command -v zip >/dev/null || { echo -e "\nzip was not found, please install. Exiting...\n" >&2; exit 1; }
+command -v perl > /dev/null || {
+    echo -e "\nperl was not found, please install. Exiting...\n" >&2
+    exit 1
+}
+command -v unzip > /dev/null || {
+    echo -e "\nunzip was not found, please install. Exiting...\n" >&2
+    exit 1
+}
+command -v zip > /dev/null || {
+    echo -e "\nzip was not found, please install. Exiting...\n" >&2
+    exit 1
+}
 
 # Script flags
 CACHE_FLAG='false'
@@ -15,26 +24,28 @@ PATH_FLAG=''
 PREMIUM_FLAG='false'
 
 while getopts 'cefhopP:' flag; do
-  case "${flag}" in
-    c) CACHE_FLAG='true' ;;
-    E) EXCLUDE_FLAG+=("${OPTARG}") ;; #currently disabled
-    e) EXPERIMENTAL_FLAG='true' ;;
-    f) FORCE_FLAG='true' ;;
-    h) HIDE_PODCASTS_FLAG='true' ;;
-    o) OLD_UI_FLAG='true' ;;
-    P) 
-      PATH_FLAG="${OPTARG}"
-      INSTALL_PATH="${PATH_FLAG}" ;;
-    p) PREMIUM_FLAG='true' ;;
-    *) 
-      echo "Error: Flag not supported."
-      exit ;;
-  esac
+    case "${flag}" in
+        c) CACHE_FLAG='true' ;;
+        E) EXCLUDE_FLAG+=("${OPTARG}") ;; #currently disabled
+        e) EXPERIMENTAL_FLAG='true' ;;
+        f) FORCE_FLAG='true' ;;
+        h) HIDE_PODCASTS_FLAG='true' ;;
+        o) OLD_UI_FLAG='true' ;;
+        P)
+            PATH_FLAG="${OPTARG}"
+            INSTALL_PATH="${PATH_FLAG}"
+            ;;
+        p) PREMIUM_FLAG='true' ;;
+        *)
+            echo "Error: Flag not supported."
+            exit
+            ;;
+    esac
 done
 
 # Handle exclude flag(s)
 for EXCLUDE_VAL in "${EXCLUDE_FLAG[@]}"; do
-  if [[ "${EXCLUDE_VAL}" == "leftsidebar" ]]; then EX_LEFTSIDEBAR='true'; fi
+    if [[ ${EXCLUDE_VAL} == "leftsidebar" ]]; then EX_LEFTSIDEBAR='true'; fi
 done
 
 # Perl command
@@ -98,11 +109,11 @@ LOG_1='s|sp://logging/v3/\w+||g'
 LOG_SENTRY='s|this\.getStackTop\(\)\.client=e|return;$&|'
 
 # Spotify Connect unlock / UI
-CONNECT_OLD_1='s| connect-device-list-item--disabled||' # 1.1.70.610+
-CONNECT_OLD_2='s|connect-picker.unavailable-to-control|spotify-connect|' # 1.1.70.610+
-CONNECT_OLD_3='s|(className:.,disabled:)(..)|$1false|' # 1.1.70.610+
-CONNECT_NEW='s/return (..isDisabled)(\?(..createElement|\(.{1,10}\))\(..,)/return false$2/' # 1.1.91.824+
-DEVICE_PICKER_NEW='s|(Enable showing a new and improved device picker UI",default:)(!1)|$1true|' # 1.1.90.855 - 1.1.95.893
+CONNECT_OLD_1='s| connect-device-list-item--disabled||'                                           # 1.1.70.610+
+CONNECT_OLD_2='s|connect-picker.unavailable-to-control|spotify-connect|'                          # 1.1.70.610+
+CONNECT_OLD_3='s|(className:.,disabled:)(..)|$1false|'                                            # 1.1.70.610+
+CONNECT_NEW='s/return (..isDisabled)(\?(..createElement|\(.{1,10}\))\(..,)/return false$2/'       # 1.1.91.824+
+DEVICE_PICKER_NEW='s|(Enable showing a new and improved device picker UI",default:)(!1)|$1true|'  # 1.1.90.855 - 1.1.95.893
 DEVICE_PICKER_OLD='s|(Enable showing a new and improved device picker UI",default:)(!0)|$1false|' # 1.1.96.783 - 1.1.97.962
 
 # Credits
@@ -117,42 +128,47 @@ echo -e "SpotX-Linux version: ${SPOTX_VERSION}\n"
 
 # Locate install directory
 if [ -z ${INSTALL_PATH+x} ]; then
-  INSTALL_PATH=$(readlink -e `type -p spotify` 2>/dev/null | rev | cut -d/ -f2- | rev)
-  if [[ -d "${INSTALL_PATH}" && "${INSTALL_PATH}" != "/usr/bin" ]]; then
-    echo "Spotify directory found in PATH: ${INSTALL_PATH}"
-  elif [[ ! -d "${INSTALL_PATH}" ]]; then
-    echo -e "\nSpotify not found in PATH. Searching for Spotify directory..."
-    INSTALL_PATH=$(timeout 10 find / -type f -path "*/spotify*Apps/*" -name "xpui.spa" -size -7M -size +3M -print -quit 2>/dev/null | rev | cut -d/ -f3- | rev)
-    if [[ -d "${INSTALL_PATH}" ]]; then
-      echo "Spotify directory found: ${INSTALL_PATH}"
-    elif [[ ! -d "${INSTALL_PATH}" ]]; then
-      echo -e "Spotify directory not found. Set directory path with -P flag.\nExiting...\n"
-      exit; fi
-  elif [[ "${INSTALL_PATH}" == "/usr/bin" ]]; then
-    echo -e "\nSpotify PATH is set to /usr/bin, searching for Spotify directory..."
-    INSTALL_PATH=$(timeout 10 find / -type f -path "*/spotify*Apps/*" -name "xpui.spa" -size -7M -size +3M -print -quit 2>/dev/null | rev | cut -d/ -f3- | rev)
-    if [[ -d "${INSTALL_PATH}" && "${INSTALL_PATH}" != "/usr/bin" ]]; then
-      echo "Spotify directory found: ${INSTALL_PATH}"
-    elif [[ "${INSTALL_PATH}" == "/usr/bin" ]] || [[ ! -d "${INSTALL_PATH}" ]]; then
-      echo -e "Spotify directory not found. Set directory path with -P flag.\nExiting...\n"
-      exit; fi; fi
+    INSTALL_PATH=$(readlink -e $(type -p spotify) 2> /dev/null | rev | cut -d/ -f2- | rev)
+    if [[ -d ${INSTALL_PATH} && ${INSTALL_PATH} != "/usr/bin" ]]; then
+        echo "Spotify directory found in PATH: ${INSTALL_PATH}"
+    elif [[ ! -d ${INSTALL_PATH} ]]; then
+        echo -e "\nSpotify not found in PATH. Searching for Spotify directory..."
+        INSTALL_PATH=$(timeout 10 find / -type f -path "*/spotify*Apps/*" -name "xpui.spa" -size -7M -size +3M -print -quit 2> /dev/null | rev | cut -d/ -f3- | rev)
+        if [[ -d ${INSTALL_PATH} ]]; then
+            echo "Spotify directory found: ${INSTALL_PATH}"
+        elif [[ ! -d ${INSTALL_PATH} ]]; then
+            echo -e "Spotify directory not found. Set directory path with -P flag.\nExiting...\n"
+            exit
+        fi
+    elif [[ ${INSTALL_PATH} == "/usr/bin" ]]; then
+        echo -e "\nSpotify PATH is set to /usr/bin, searching for Spotify directory..."
+        INSTALL_PATH=$(timeout 10 find / -type f -path "*/spotify*Apps/*" -name "xpui.spa" -size -7M -size +3M -print -quit 2> /dev/null | rev | cut -d/ -f3- | rev)
+        if [[ -d ${INSTALL_PATH} && ${INSTALL_PATH} != "/usr/bin" ]]; then
+            echo "Spotify directory found: ${INSTALL_PATH}"
+        elif [[ ${INSTALL_PATH} == "/usr/bin" ]] || [[ ! -d ${INSTALL_PATH} ]]; then
+            echo -e "Spotify directory not found. Set directory path with -P flag.\nExiting...\n"
+            exit
+        fi
+    fi
 else
-  if [[ ! -d "${INSTALL_PATH}" ]]; then
-    echo -e "Directory path set by -P was not found.\nExiting...\n"
-    exit
-  elif [[ ! -f "${INSTALL_PATH}/Apps/xpui.spa" ]]; then
-    echo -e "No xpui found in directory provided with -P.\nPlease confirm directory and try again or re-install Spotify.\nExiting...\n"
-    exit; fi; fi
+    if [[ ! -d ${INSTALL_PATH} ]]; then
+        echo -e "Directory path set by -P was not found.\nExiting...\n"
+        exit
+    elif [[ ! -f "${INSTALL_PATH}/Apps/xpui.spa" ]]; then
+        echo -e "No xpui found in directory provided with -P.\nPlease confirm directory and try again or re-install Spotify.\nExiting...\n"
+        exit
+    fi
+fi
 
 # Find client version
 CLIENT_VERSION=$("${INSTALL_PATH}"/spotify --version | cut -dn -f2- | rev | cut -d. -f2- | rev)
 
 # Version function for version comparison
-function ver { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+function ver() { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
 # Report Spotify version
 echo -e "\nSpotify version: ${CLIENT_VERSION}\n"
-     
+
 # Path vars
 CACHE_PATH="${HOME}/.cache/spotify/"
 XPUI_PATH="${INSTALL_PATH}/Apps"
@@ -165,175 +181,196 @@ HOME_V2_JS="${XPUI_DIR}/home-v2.js"
 VENDOR_XPUI_JS="${XPUI_DIR}/vendor~xpui.js"
 
 # xpui detection
-if [[ ! -f "${XPUI_SPA}" ]]; then
-  echo -e "\nxpui not found!\nReinstall Spotify then try again.\nExiting...\n"
-  exit
+if [[ ! -f ${XPUI_SPA} ]]; then
+    echo -e "\nxpui not found!\nReinstall Spotify then try again.\nExiting...\n"
+    exit
 else
-  if [[ ! -w "${XPUI_PATH}" ]]; then
-    echo -e "\nSpotX does not have write permission in Spotify directory.\nRequesting sudo permission...\n"
-    sudo chmod a+wr "${INSTALL_PATH}" && sudo chmod a+wr -R "${XPUI_PATH}"; fi
-  if [[ "${FORCE_FLAG}" == "false" ]]; then
-    if [[ -f "${XPUI_BAK}" ]]; then
-      echo "SpotX backup found, SpotX has already been used on this install."
-      echo -e "Re-run SpotX using the '-f' flag to force xpui patching.\n"
-      echo "Skipping xpui patches and continuing SpotX..."
-      XPUI_SKIP="true"
+    if [[ ! -w ${XPUI_PATH} ]]; then
+        echo -e "\nSpotX does not have write permission in Spotify directory.\nRequesting sudo permission...\n"
+        sudo chmod a+wr "${INSTALL_PATH}" && sudo chmod a+wr -R "${XPUI_PATH}"
+    fi
+    if [[ ${FORCE_FLAG} == "false" ]]; then
+        if [[ -f ${XPUI_BAK} ]]; then
+            echo "SpotX backup found, SpotX has already been used on this install."
+            echo -e "Re-run SpotX using the '-f' flag to force xpui patching.\n"
+            echo "Skipping xpui patches and continuing SpotX..."
+            XPUI_SKIP="true"
+        else
+            echo "Creating xpui backup..."
+            cp "${XPUI_SPA}" "${XPUI_BAK}"
+            XPUI_SKIP="false"
+        fi
     else
-      echo "Creating xpui backup..."
-      cp "${XPUI_SPA}" "${XPUI_BAK}"
-      XPUI_SKIP="false"; fi
-  else
-    if [[ -f "${XPUI_BAK}" ]]; then
-      echo "Backup xpui found, restoring original..."
-      rm "${XPUI_SPA}"
-      cp "${XPUI_BAK}" "${XPUI_SPA}"
-      XPUI_SKIP="false"
-    else
-      echo "Creating xpui backup..."
-      cp "${XPUI_SPA}" "${XPUI_BAK}"
-      XPUI_SKIP="false"; fi; fi; fi
+        if [[ -f ${XPUI_BAK} ]]; then
+            echo "Backup xpui found, restoring original..."
+            rm "${XPUI_SPA}"
+            cp "${XPUI_BAK}" "${XPUI_SPA}"
+            XPUI_SKIP="false"
+        else
+            echo "Creating xpui backup..."
+            cp "${XPUI_SPA}" "${XPUI_BAK}"
+            XPUI_SKIP="false"
+        fi
+    fi
+fi
 
 # Extract xpui.spa
-if [[ "${XPUI_SKIP}" == "false" ]]; then
-  echo "Extracting xpui..."
-  unzip -qq "${XPUI_SPA}" -d "${XPUI_DIR}"
-  if grep -Fq "SpotX" "${XPUI_JS}"; then
-    echo -e "\nWarning: Detected SpotX patches but no backup file!"
-    echo -e "Further xpui patching not allowed until Spotify is reinstalled/upgraded.\n"
-    echo "Skipping xpui patches and continuing SpotX..."
-    XPUI_SKIP="true"
-    rm "${XPUI_BAK}" 2>/dev/null
-    rm -rf "${XPUI_DIR}" 2>/dev/null
-  else
-    rm "${XPUI_SPA}"; fi; fi
+if [[ ${XPUI_SKIP} == "false" ]]; then
+    echo "Extracting xpui..."
+    unzip -qq "${XPUI_SPA}" -d "${XPUI_DIR}"
+    if grep -Fq "SpotX" "${XPUI_JS}"; then
+        echo -e "\nWarning: Detected SpotX patches but no backup file!"
+        echo -e "Further xpui patching not allowed until Spotify is reinstalled/upgraded.\n"
+        echo "Skipping xpui patches and continuing SpotX..."
+        XPUI_SKIP="true"
+        rm "${XPUI_BAK}" 2> /dev/null
+        rm -rf "${XPUI_DIR}" 2> /dev/null
+    else
+        rm "${XPUI_SPA}"
+    fi
+fi
 
 echo "Applying SpotX patches..."
 
-if [[ "${XPUI_SKIP}" == "false" ]]; then
-  if [[ "${PREMIUM_FLAG}" == "false" ]]; then
-    # Remove Empty ad block
-    echo "Removing ad-related content..."
-    $PERL "${AD_EMPTY_AD_BLOCK}" "${XPUI_JS}"
-    # Remove Playlist sponsors
-    $PERL "${AD_PLAYLIST_SPONSORS}" "${XPUI_JS}"
-    # Remove Upgrade button
-    $PERL "${AD_UPGRADE_BUTTON}" "${XPUI_JS}"
-    # Remove Audio ads
-    $PERL "${AD_AUDIO_ADS}" "${XPUI_JS}"
-    # Remove billboard ads
-    $PERL "${AD_BILLBOARD}" "${XPUI_JS}"
-    # Remove premium upsells
-    $PERL "${AD_UPSELL}" "${XPUI_JS}"
-    
-    # Remove Premium-only features
-    echo "Removing premium-only features..."
-    $PERL "${HIDE_DL_QUALITY}" "${XPUI_JS}"
-    echo "${HIDE_DL_ICON}" >> "${XPUI_CSS}"
-    echo "${HIDE_DL_MENU}" >> "${XPUI_CSS}"
-    echo "${HIDE_VERY_HIGH}" >> "${XPUI_CSS}"
-    
-    # Unlock Spotify Connect
-    echo "Unlocking Spotify Connect..."
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.91.824") ]]; then
-      $PERL "${CONNECT_OLD_1}" "${XPUI_JS}"
-      $PERL "${CONNECT_OLD_2}" "${XPUI_JS}"
-      $PERL "${CONNECT_OLD_3}" "${XPUI_JS}"
-    elif [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.91.824") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.96.783") ]]; then
-      $PERL "${DEVICE_PICKER_NEW}" "${XPUI_JS}"
-      $PERL "${CONNECT_NEW}" "${XPUI_JS}"
-    elif [[ $(ver "${CLIENT_VERSION}") -gt $(ver "1.1.96.783") ]]; then
-      $PERL "${CONNECT_NEW}" "${XPUI_JS}"; fi
-  else
-    echo "Premium subscription setup selected..."; fi; fi
+if [[ ${XPUI_SKIP} == "false" ]]; then
+    if [[ ${PREMIUM_FLAG} == "false" ]]; then
+        # Remove Empty ad block
+        echo "Removing ad-related content..."
+        $PERL "${AD_EMPTY_AD_BLOCK}" "${XPUI_JS}"
+        # Remove Playlist sponsors
+        $PERL "${AD_PLAYLIST_SPONSORS}" "${XPUI_JS}"
+        # Remove Upgrade button
+        $PERL "${AD_UPGRADE_BUTTON}" "${XPUI_JS}"
+        # Remove Audio ads
+        $PERL "${AD_AUDIO_ADS}" "${XPUI_JS}"
+        # Remove billboard ads
+        $PERL "${AD_BILLBOARD}" "${XPUI_JS}"
+        # Remove premium upsells
+        $PERL "${AD_UPSELL}" "${XPUI_JS}"
+
+        # Remove Premium-only features
+        echo "Removing premium-only features..."
+        $PERL "${HIDE_DL_QUALITY}" "${XPUI_JS}"
+        echo "${HIDE_DL_ICON}" >> "${XPUI_CSS}"
+        echo "${HIDE_DL_MENU}" >> "${XPUI_CSS}"
+        echo "${HIDE_VERY_HIGH}" >> "${XPUI_CSS}"
+
+        # Unlock Spotify Connect
+        echo "Unlocking Spotify Connect..."
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.91.824"))); then
+            $PERL "${CONNECT_OLD_1}" "${XPUI_JS}"
+            $PERL "${CONNECT_OLD_2}" "${XPUI_JS}"
+            $PERL "${CONNECT_OLD_3}" "${XPUI_JS}"
+        elif (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.91.824") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.96.783"))); then
+            $PERL "${DEVICE_PICKER_NEW}" "${XPUI_JS}"
+            $PERL "${CONNECT_NEW}" "${XPUI_JS}"
+        elif (($(ver "${CLIENT_VERSION}") > $(ver "1.1.96.783"))); then
+            $PERL "${CONNECT_NEW}" "${XPUI_JS}"
+        fi
+    else
+        echo "Premium subscription setup selected..."
+    fi
+fi
 
 # Experimental patches
-if [[ "${XPUI_SKIP}" == "false" ]]; then
-  if [[ "${EXPERIMENTAL_FLAG}" == "true" ]]; then
-    echo "Adding experimental features..."
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.99.871") ]]; then $PERL "${ENABLE_ADD_PLAYLIST}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.99.871") ]]; then $PERL "${ENABLE_BAD_BUNNY}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.89.854") ]]; then $PERL "${ENABLE_BALLOONS}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") ]]; then $PERL "${ENABLE_BLOCK_USERS}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.93.896") ]]; then $PERL "${ENABLE_CAROUSELS}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.92.644") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.99.871") ]]; then $PERL "${ENABLE_CLEAR_DOWNLOADS}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.99.871") ]]; then $PERL "${ENABLE_DEVICE_LIST_LOCAL}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.79.763") ]]; then $PERL "${ENABLE_DISCOG_SHELF}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.84.716") ]]; then $PERL "${ENABLE_ENHANCE_PLAYLIST}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.86.857") ]]; then $PERL "${ENABLE_ENHANCE_SONGS}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.88.595") ]]; then $PERL "${ENABLE_EQUALIZER}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.1.958") ]]; then $PERL "${ENABLE_FOLLOWERS_ON_PROFILE}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.0.1155") ]]; then $PERL "${ENABLE_FORGET_DEVICES}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.87.612") ]]; then $PERL "${ENABLE_IGNORE_REC}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") ]]; then $PERL "${ENABLE_LIKED_SONGS}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.94.864") ]]; then $PERL "${ENABLE_LYRICS_CHECK}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.87.612") ]]; then $PERL "${ENABLE_LYRICS_MATCH}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.96.783") ]]; then $PERL "${ENABLE_MADE_FOR_YOU}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.91.824") ]]; then $PERL "${ENABLE_PATHFINDER_DATA}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.94.864") ]]; then $PERL "${ENABLE_PLAYLIST_CREATION_FLOW}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.75.572") ]]; then $PERL "${ENABLE_PLAYLIST_PERMISSIONS_FLOWS}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.0.1165") ]]; then $PERL "${ENABLE_PODCAST_PLAYBACK_SPEED}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.99.871") ]]; then $PERL "${ENABLE_PODCAST_TRIMMING}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.86.857") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.94.864") ]]; then $PERL "${ENABLE_SEARCH_BOX}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.85.884") ]]; then $PERL "${ENABLE_SIMILAR_PLAYLIST}" "${XPUI_JS}"; fi; fi; fi
+if [[ ${XPUI_SKIP} == "false" ]]; then
+    if [[ ${EXPERIMENTAL_FLAG} == "true" ]]; then
+        echo "Adding experimental features..."
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.99.871"))); then $PERL "${ENABLE_ADD_PLAYLIST}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.99.871"))); then $PERL "${ENABLE_BAD_BUNNY}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.89.854"))); then $PERL "${ENABLE_BALLOONS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610"))); then $PERL "${ENABLE_BLOCK_USERS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.93.896"))); then $PERL "${ENABLE_CAROUSELS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.92.644") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.99.871"))); then $PERL "${ENABLE_CLEAR_DOWNLOADS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.99.871"))); then $PERL "${ENABLE_DEVICE_LIST_LOCAL}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.79.763"))); then $PERL "${ENABLE_DISCOG_SHELF}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.84.716"))); then $PERL "${ENABLE_ENHANCE_PLAYLIST}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.86.857"))); then $PERL "${ENABLE_ENHANCE_SONGS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.88.595"))); then $PERL "${ENABLE_EQUALIZER}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.2.1.958"))); then $PERL "${ENABLE_FOLLOWERS_ON_PROFILE}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.2.0.1155"))); then $PERL "${ENABLE_FORGET_DEVICES}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.87.612"))); then $PERL "${ENABLE_IGNORE_REC}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610"))); then $PERL "${ENABLE_LIKED_SONGS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.94.864"))); then $PERL "${ENABLE_LYRICS_CHECK}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.87.612"))); then $PERL "${ENABLE_LYRICS_MATCH}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.96.783"))); then $PERL "${ENABLE_MADE_FOR_YOU}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.91.824"))); then $PERL "${ENABLE_PATHFINDER_DATA}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.70.610") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.94.864"))); then $PERL "${ENABLE_PLAYLIST_CREATION_FLOW}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.75.572"))); then $PERL "${ENABLE_PLAYLIST_PERMISSIONS_FLOWS}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.2.0.1165"))); then $PERL "${ENABLE_PODCAST_PLAYBACK_SPEED}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.99.871"))); then $PERL "${ENABLE_PODCAST_TRIMMING}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.86.857") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.94.864"))); then $PERL "${ENABLE_SEARCH_BOX}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.85.884"))); then $PERL "${ENABLE_SIMILAR_PLAYLIST}" "${XPUI_JS}"; fi
+    fi
+fi
 
 # Remove logging
-if [[ "${XPUI_SKIP}" == "false" ]]; then
-  echo "Removing logging..."
-  $PERL "${LOG_1}" "${XPUI_JS}"
-  $PERL "${LOG_SENTRY}" "${VENDOR_XPUI_JS}"; fi
+if [[ ${XPUI_SKIP} == "false" ]]; then
+    echo "Removing logging..."
+    $PERL "${LOG_1}" "${XPUI_JS}"
+    $PERL "${LOG_SENTRY}" "${VENDOR_XPUI_JS}"
+fi
 
 # Handle new home screen UI
-if [[ "${XPUI_SKIP}" == "false" ]]; then
-  if [[ "${OLD_UI_FLAG}" == "true" ]]; then
-    echo "Skipping new home UI patch..."
-  elif [[ $(ver "${CLIENT_VERSION}") -gt $(ver "1.1.93.896") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.97.956") ]]; then
-    echo "Enabling new home screen UI..."
-    $PERL "${NEW_UI}" "${XPUI_JS}"
-    $PERL "${AUDIOBOOKS_CLIENTX}" "${XPUI_JS}"
-  elif [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.97.956") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.2.3.1107") ]]; then
-    echo "Enabling new home screen UI..."
-    $PERL "${NEW_UI_2}" "${XPUI_JS}"
-    $PERL "${AUDIOBOOKS_CLIENTX}" "${XPUI_JS}"
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.98.683") ]]; then $PERL "${ENABLE_RIGHT_SIDEBAR}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.0.1165") ]]; then $PERL "${ENABLE_RIGHT_SIDEBAR_LYRICS}" "${XPUI_JS}"; fi
-  elif [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.3.1107") ]]; then
-    echo "Enabling new home screen UI..."
-    $PERL "${AUDIOBOOKS_CLIENTX}" "${XPUI_JS}"
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.97.962") ]]; then $PERL "${ENABLE_LEFT_SIDEBAR}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.98.683") ]]; then $PERL "${ENABLE_RIGHT_SIDEBAR}" "${XPUI_JS}"; fi
-    if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.0.1165") ]]; then $PERL "${ENABLE_RIGHT_SIDEBAR_LYRICS}" "${XPUI_JS}"; fi
-  else
-    :; fi; fi
+if [[ ${XPUI_SKIP} == "false" ]]; then
+    if [[ ${OLD_UI_FLAG} == "true" ]]; then
+        echo "Skipping new home UI patch..."
+    elif (($(ver "${CLIENT_VERSION}") > $(ver "1.1.93.896") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.97.956"))); then
+        echo "Enabling new home screen UI..."
+        $PERL "${NEW_UI}" "${XPUI_JS}"
+        $PERL "${AUDIOBOOKS_CLIENTX}" "${XPUI_JS}"
+    elif (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.97.956") && $(ver "${CLIENT_VERSION}") < $(ver "1.2.3.1107"))); then
+        echo "Enabling new home screen UI..."
+        $PERL "${NEW_UI_2}" "${XPUI_JS}"
+        $PERL "${AUDIOBOOKS_CLIENTX}" "${XPUI_JS}"
+        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.98.683") ]]; then $PERL "${ENABLE_RIGHT_SIDEBAR}" "${XPUI_JS}"; fi
+        if [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.0.1165") ]]; then $PERL "${ENABLE_RIGHT_SIDEBAR_LYRICS}" "${XPUI_JS}"; fi
+    elif [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.2.3.1107") ]]; then
+        echo "Enabling new home screen UI..."
+        $PERL "${AUDIOBOOKS_CLIENTX}" "${XPUI_JS}"
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.97.962"))); then $PERL "${ENABLE_LEFT_SIDEBAR}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.98.683"))); then $PERL "${ENABLE_RIGHT_SIDEBAR}" "${XPUI_JS}"; fi
+        if (($(ver "${CLIENT_VERSION}") >= $(ver "1.2.0.1165"))); then $PERL "${ENABLE_RIGHT_SIDEBAR_LYRICS}" "${XPUI_JS}"; fi
+    fi
+fi
 
 # Hide podcasts, episodes and audiobooks on home screen
-if [[ "${XPUI_SKIP}" == "false" ]]; then
-  if [[ "${HIDE_PODCASTS_FLAG}" == "true" ]]; then
-    if [[ $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.93.896") ]]; then
-      echo "Hiding non-music items on home screen..."
-      $PERL "${HIDE_PODCASTS}" "${XPUI_JS}"
-    elif [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.93.896") && $(ver "${CLIENT_VERSION}") -le $(ver "1.1.96.785") ]]; then
-      echo "Hiding non-music items on home screen..."
-      $PERL "${HIDE_PODCASTS2}" "${HOME_V2_JS}"
-    elif [[ $(ver "${CLIENT_VERSION}") -gt $(ver "1.1.96.785") && $(ver "${CLIENT_VERSION}") -lt $(ver "1.1.98.683") ]]; then
-      echo "Hiding non-music items on home screen..."
-      $PERL "${HIDE_PODCASTS3}" "${HOME_V2_JS}"
-    elif [[ $(ver "${CLIENT_VERSION}") -ge $(ver "1.1.98.683") ]]; then
-      echo "Hiding non-music items on home screen..."
-      $PERL "${HIDE_PODCASTS3}" "${XPUI_JS}"; fi; fi; fi
+if [[ ${XPUI_SKIP} == "false" ]]; then
+    if [[ ${HIDE_PODCASTS_FLAG} == "true" ]]; then
+        if (($(ver "${CLIENT_VERSION}") < $(ver "1.1.93.896"))); then
+            echo "Hiding non-music items on home screen..."
+            $PERL "${HIDE_PODCASTS}" "${XPUI_JS}"
+        elif (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.93.896") && $(ver "${CLIENT_VERSION}") <= $(ver "1.1.96.785"))); then
+            echo "Hiding non-music items on home screen..."
+            $PERL "${HIDE_PODCASTS2}" "${HOME_V2_JS}"
+        elif (($(ver "${CLIENT_VERSION}") > $(ver "1.1.96.785") && $(ver "${CLIENT_VERSION}") < $(ver "1.1.98.683"))); then
+            echo "Hiding non-music items on home screen..."
+            $PERL "${HIDE_PODCASTS3}" "${HOME_V2_JS}"
+        elif (($(ver "${CLIENT_VERSION}") >= $(ver "1.1.98.683"))); then
+            echo "Hiding non-music items on home screen..."
+            $PERL "${HIDE_PODCASTS3}" "${XPUI_JS}"
+        fi
+    fi
+fi
 
 # Delete app cache
-if [[ "${CACHE_FLAG}" == "true" ]]; then
-  echo "Clearing app cache..."
-  rm -rf "$CACHE_PATH"; fi
-  
+if [[ ${CACHE_FLAG} == "true" ]]; then
+    echo "Clearing app cache..."
+    rm -rf "$CACHE_PATH"
+fi
+
 # Rebuild xpui.spa
-if [[ "${XPUI_SKIP}" == "false" ]]; then
-  echo "Rebuilding xpui..."
-  echo -e "\n//# SpotX was here" >> "${XPUI_JS}"; fi
+if [[ ${XPUI_SKIP} == "false" ]]; then
+    echo "Rebuilding xpui..."
+    echo -e "\n//# SpotX was here" >> "${XPUI_JS}"
+fi
 
 # Zip files inside xpui folder
-if [[ "${XPUI_SKIP}" == "false" ]]; then
-  (cd "${XPUI_DIR}"; zip -qq -r ../xpui.spa .)
-  rm -rf "${XPUI_DIR}"; fi
+if [[ ${XPUI_SKIP} == "false" ]]; then
+    pushd "${XPUI_DIR}" > /dev/null
+    zip -qq -r ../xpui.spa .
+    popd > /dev/null
+    rm -rf "${XPUI_DIR}"
+fi
 
 echo -e "SpotX finished patching!\n"
