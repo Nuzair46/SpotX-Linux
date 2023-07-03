@@ -11,7 +11,7 @@
 <center>
     <h4 align="center">A multi-featured adblocker for the Spotify Linux application.</h4>
     <p align="center">
-        <strong>Last updated:</strong> 20 January 2023<br>
+        <strong>Last updated:</strong> 03 July 2023<br>
         <strong>Last tested version:</strong> 1.2.3.1115
     </p> 
 </center>
