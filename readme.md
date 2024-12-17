@@ -23,7 +23,6 @@
 - Blocks logging (Sentry, etc)
 - Unlocks the skip function for any track
 - Blocks Spotify automatic updates (optional)
-- Enables [experimental features](https://github.com/SpotX-CLI/SpotX-Win/discussions/50) (optional)
 - Hides podcasts, episodes and audiobooks on Home Screen (optional)
 
 ### Installation/Update:
@@ -33,13 +32,13 @@ NOTE: SpotX does not support the Spotify client from Snap
 - Run The following command in Terminal:
 
 ```
-bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/Nuzair46/BlockTheSpot-Linux/main/install.sh)
 ```
 
 #### Flatpak Version
 To install on the Flatpak version of Spotify:
 ```
-bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh) -P /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/
+bash <(curl -sSL https://raw.githubusercontent.com/Nuzair46/BlockTheSpot-Linux/main/install.sh) -P /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/
 ```
 
 #### Optional Install Arguments:
@@ -56,7 +55,7 @@ Use any combination of flags.
 The following example clears app cache, adds experimental features and uses the new UI (if supported):
     
 ```
-bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh) -ce
+bash <(curl -sSL https://raw.githubusercontent.com/Nuzair46/BlockTheSpot-Linux/main/install.sh) -ce
 ```
 
 ### Uninstall:
@@ -65,7 +64,7 @@ bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/in
 - Run The following command in Terminal:
 
 ```
-bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/uninstall.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/Nuzair46/BlockTheSpot-Linux/main/uninstall.sh)
 ```
 
 or
@@ -83,6 +82,4 @@ or
 
 ### Credits
 
-- Thanks to [SpotX - amd64fox](https://github.com/amd64fox/spotx).
-- Thanks to [@jetfir3](https://github.com/jetfir3) for the extended contribution
 - Thanks to the peeps on Discord who tested these on various Linux distro's
